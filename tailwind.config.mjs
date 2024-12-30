@@ -1,15 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,jsx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        nightSky: '#0d1b2a',
+        deepBlue: '#1b263b',
+        moonlitBlue: '#415a77',
+        starryGlow: '#778da9',
+        starlight: '#e0e1dd',
+        goldenStar: '#ffd700',
       },
     },
   },
