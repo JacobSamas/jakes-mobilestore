@@ -9,9 +9,18 @@ import { gsap } from "gsap";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [searchQuery, setSearchQuery] = useState("");
   const headerRef = useRef(null);
   const titleRef = useRef([]);
   const router = useRouter();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${searchQuery}`);
+    }
+  };
+
 
   useEffect(() => {
     const letters = titleRef.current;
@@ -70,9 +79,20 @@ export default function Header() {
           </button>
         </nav>
 
-        {/* Icons */}
+        <form onSubmit={handleSearch} className="flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-4 py-2 rounded bg-gray-700 text-white border-none outline-none focus:ring-2 focus:ring-goldenStar"
+          />
+          <button type="submit">
+            <MagnifyingGlassIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
+          </button>
+        </form>
+
         <div className="flex items-center space-x-4">
-          <MagnifyingGlassIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
           <Link href="/cart">
             <ShoppingCartIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
           </Link>
