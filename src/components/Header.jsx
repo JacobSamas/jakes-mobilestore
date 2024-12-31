@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bars3Icon, ShoppingCartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { gsap } from "gsap";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulated login state
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const headerRef = useRef(null);
   const titleRef = useRef([]);
   const router = useRouter();
 
-  // Rotating animation for title
   useEffect(() => {
     const letters = titleRef.current;
     gsap.to(letters, {
@@ -24,7 +24,6 @@ export default function Header() {
     });
   }, []);
 
-  // Slide animation for mobile menu
   useEffect(() => {
     const menu = document.getElementById("mobile-menu");
     if (menu) {
@@ -57,12 +56,12 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
-          <a href="/products" className="hover:text-goldenStar transition-all">
+          <Link href="/products" className="hover:text-goldenStar transition-all">
             Products
-          </a>
-          <a href="/about" className="hover:text-goldenStar transition-all">
+          </Link>
+          <Link href="/about" className="hover:text-goldenStar transition-all">
             About
-          </a>
+          </Link>
           <button
             className="px-4 py-2 bg-goldenStar text-deepBlue font-bold rounded hover:bg-starlight transition-all"
             onClick={() => setIsLoggedIn(!isLoggedIn)}
@@ -74,7 +73,9 @@ export default function Header() {
         {/* Icons */}
         <div className="flex items-center space-x-4">
           <MagnifyingGlassIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
-          <ShoppingCartIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
+          <Link href="/cart">
+            <ShoppingCartIcon className="h-6 w-6 cursor-pointer hover:text-goldenStar transition-all" />
+          </Link>
           <Bars3Icon
             className="h-6 w-6 cursor-pointer md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -88,15 +89,15 @@ export default function Header() {
         className="overflow-hidden md:hidden bg-deepBlue"
         style={{ height: 0, opacity: 0 }}
       >
-        <a href="/" className="block py-2 px-4 hover:bg-moonlitBlue">
+        <Link href="/" className="block py-2 px-4 hover:bg-moonlitBlue">
           Home
-        </a>
-        <a href="/products" className="block py-2 px-4 hover:bg-moonlitBlue">
+        </Link>
+        <Link href="/products" className="block py-2 px-4 hover:bg-moonlitBlue">
           Products
-        </a>
-        <a href="/about" className="block py-2 px-4 hover:bg-moonlitBlue">
+        </Link>
+        <Link href="/about" className="block py-2 px-4 hover:bg-moonlitBlue">
           About
-        </a>
+        </Link>
         <button
           className="block py-2 px-4 text-left hover:bg-moonlitBlue"
           onClick={() => setIsLoggedIn(!isLoggedIn)}
