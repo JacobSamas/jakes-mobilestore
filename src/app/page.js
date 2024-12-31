@@ -1,118 +1,189 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion"; // Add this for smooth animations
 
-gsap.registerPlugin(ScrollTrigger);
-
-export default function Homepage() {
-  const heroRef = useRef(null);
-  const cardsRef = useRef([]);
+export default function HomePage() {
+  const [stars, setStars] = useState([]);
 
   useEffect(() => {
-    const hero = heroRef.current;
+    // Generate stars only on the client
+    const generatedStars = [];
+    for (let i = 0; i < 100; i++) {
+      const size = Math.random() * 3; // Random star size
+      generatedStars.push({
+        id: i,
+        size,
+        top: Math.random() * 100, // Random position
+        left: Math.random() * 100,
+        duration: Math.random() * 2 + 1, // Random animation duration
+      });
+    }
+    setStars(generatedStars);
 
-    // Animate Hero Text
+    // GSAP animations for sections
     gsap.fromTo(
-      hero,
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 1.5, ease: "power2.out" }
-    );
-
-    // Animate "Why Choose Us" Cards
-    gsap.fromTo(
-      cardsRef.current,
+      ".core-value",
       { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.3,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: cardsRef.current[0],
-          start: "top 90%",
-        },
-      }
+      { opacity: 1, y: 0, duration: 1, stagger: 0.3, ease: "power1.out" }
+    );
+    gsap.fromTo(
+      ".about-text",
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 1, ease: "power1.out" }
     );
   }, []);
 
   return (
-    <div className="bg-nightSky text-starlight min-h-screen">
+    <div className="relative bg-nightSky text-starlight">
+      {/* Star Background */}
+      <div className="absolute inset-0">
+        {stars.map((star) => (
+          <div
+            key={star.id}
+            className="star"
+            style={{
+              width: star.size,
+              height: star.size,
+              top: `${star.top}vh`,
+              left: `${star.left}vw`,
+              animationDuration: `${star.duration}s`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="h-screen flex flex-col items-center justify-center text-center px-4 bg-gradient-to-b from-deepBlue to-nightSky"
-      >
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-wide mb-6">
-          Jake&apos;s MobileStore
-        </h1>
-        <p className="text-xl md:text-2xl max-w-2xl mb-8">
-          Elevate your mobile experience. The best phones, just a click away.
-        </p>
-        <a
-          href="/products"
-          className="px-8 py-4 bg-goldenStar text-deepBlue font-bold rounded-lg shadow-lg hover:bg-starlight transition-all"
+      <section className="relative h-screen flex flex-col items-center justify-center space-y-6 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="promo-text text-4xl md:text-6xl font-extrabold"
         >
-          Explore Now
-        </a>
+          Welcome to Jake&apos;s Mobile Store
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="promo-text text-lg md:text-2xl"
+        >
+          Revolutionizing the way you shop for mobile devices.
+        </motion.p>
+        <motion.a
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          href="/products"
+          className="promo-text px-6 py-3 bg-goldenStar text-deepBlue text-lg font-bold rounded hover:bg-starlight transition-all"
+        >
+          View Products
+        </motion.a>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-12">
-            Why Choose Jake&apos;s MobileStore?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              { title: "Fast Delivery", description: "Get it when you need it." },
-              { title: "Top Brands", description: "Only the best phones." },
-              { title: "Unmatched Support", description: "We're here for you." },
-            ].map((item, index) => (
-              <div
-                key={index}
-                ref={(el) => (cardsRef.current[index] = el)}
-                className="p-6 bg-deepBlue rounded-lg shadow-lg hover:scale-105 transition-transform"
-              >
-                <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                <p className="text-lg">{item.description}</p>
+      {/* Core Values Section */}
+      <section className="py-16 bg-deepBlue">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Why Choose Us?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="core-value flex flex-col items-center space-y-4">
+              <div className="bg-goldenStar w-16 h-16 flex items-center justify-center rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-deepBlue"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4"
+                  />
+                </svg>
               </div>
-            ))}
+              <h3 className="text-xl font-bold">Affordable Prices</h3>
+              <p>Get the best deals on the latest devices without breaking the bank.</p>
+            </div>
+            <div className="core-value flex flex-col items-center space-y-4">
+              <div className="bg-goldenStar w-16 h-16 flex items-center justify-center rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-deepBlue"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold">Fast Shipping</h3>
+              <p>Enjoy lightning-fast delivery to your doorstep.</p>
+            </div>
+            <div className="core-value flex flex-col items-center space-y-4">
+              <div className="bg-goldenStar w-16 h-16 flex items-center justify-center rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-deepBlue"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8l-4 4h8l-4 4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold">Top-Quality Devices</h3>
+              <p>Shop only the best mobile devices trusted by millions.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Callout Section */}
-      <section className="py-32 bg-gradient-to-r from-moonlitBlue to-deepBlue text-center">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-extrabold mb-6">
-            Your Next Phone Awaits
-          </h2>
-          <p className="text-lg max-w-3xl mx-auto mb-8">
-            Jake&apos;s MobileStore brings you cutting-edge mobile devices with
-            seamless service. Step into the future of mobile shopping.
-          </p>
-          <a
-            href="/about"
-            className="px-6 py-3 bg-goldenStar text-deepBlue font-bold rounded-lg shadow-lg hover:bg-starlight transition-all"
+      {/* About Us Section */}
+      <section className="py-16">
+        <div className="container mx-auto flex flex-col md:flex-row items-center md:space-x-12">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
+            className="about-text flex-1"
           >
-            Learn More
-          </a>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Mission</h2>
+            <p className="text-lg">
+              At Jake&apos;s Mobile Store, we aim to simplify mobile shopping by offering
+              an unparalleled online experience. Quality, affordability, and customer
+              satisfaction are at the heart of what we do.
+            </p>
+            <a
+              href="/about"
+              className="mt-4 px-6 py-3 bg-goldenStar text-deepBlue text-lg font-bold rounded hover:bg-starlight transition-all inline-block"
+            >
+              Read Our Story
+            </a>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+            className="about-placeholder flex-1 w-full h-64 bg-moonlitBlue rounded-lg flex items-center justify-center"
+          >
+            <span className="text-starlight font-bold text-2xl">Placeholder</span>
+          </motion.div>
         </div>
       </section>
-
-      {/* Footer-like CTA */}
-      <footer className="py-10 text-center">
-        <h3 className="text-2xl font-bold mb-4">Ready to Discover More?</h3>
-        <a
-          href="/products"
-          className="px-8 py-4 bg-goldenStar text-deepBlue font-bold rounded-lg shadow-lg hover:bg-starlight transition-all"
-        >
-          Browse Products
-        </a>
-      </footer>
     </div>
   );
 }
